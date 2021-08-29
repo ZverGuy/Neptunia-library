@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RootNamespace>Neptunia_library</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="CacheServices" />
+      <Folder Include="ContentSources" />
+      <Folder Include="DataBaseProviders" />
+      <Folder Include="Extensions" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+    </ItemGroup>
+
+</Project>
