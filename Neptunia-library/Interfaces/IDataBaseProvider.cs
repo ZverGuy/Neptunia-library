@@ -8,7 +8,7 @@ namespace Neptunia_library.Interfaces
 {
     public interface IDataBaseProvider
     {
-        void OnGettingDependencyServices(IServiceProvider provider);
+       
         DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null);
         Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName);
     }

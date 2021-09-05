@@ -9,7 +9,7 @@ namespace Neptunia_library.Interfaces
     {
         string SiteUrl { get; }
 
-        void OnGettingDependencyServices(IServiceProvider provider);
+       
         IContentSource GetContent(string contentname, [AllowNull] string userAgent = null);
         Task<IContentSource> GetContentAsync(string contentname);
     }

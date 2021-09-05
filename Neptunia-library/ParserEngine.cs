@@ -27,7 +27,7 @@ namespace Neptunia_library
         internal ParserEngine(ContentSourceProviderOptions contentOptions, 
                               DataBaseProviderOptions dataBaseOptions, 
                               IServiceCollection serviceCollection, 
-                              [AllowNull] ISearchEngine searchEngine = null, 
+                              [AllowNull] Type searchEngine = null, 
                               [AllowNull] ICacheService service = null, 
                               [AllowNull] IUserAgentStorage userAgentStorage = null, 
                               [AllowNull] IWebDriver webDriver = null)
@@ -41,7 +41,11 @@ namespace Neptunia_library
             foreach (var variable in contentOptions.ContentSourceProviders)
             {
                 IContentSourceProvider contentprovider = (IContentSourceProvider)Activator.CreateInstance(variable.Item2);
-                contentprovider.OnGettingDependencyServices(_serviceProvider);
+
+                if (contentprovider is IGetDependencies dep)
+                {
+                    dep.OnGettingDependencyServices(_serviceProvider);
+                }
                 _contentSourceProviders.Add((variable.Item1, contentprovider));
             }
             
@@ -49,7 +53,11 @@ namespace Neptunia_library
             foreach (var variable in dataBaseOptions.DataBaseProvider)
             {
                 IDataBaseProvider databaseprovider = (IDataBaseProvider)Activator.CreateInstance(variable.Item2);
-                databaseprovider.OnGettingDependencyServices(_serviceProvider);
+
+                if (databaseprovider is IGetDependencies dep)
+                {
+                    dep.OnGettingDependencyServices(_serviceProvider);
+                }
                 _dataBaseProviders.Add((variable.Item1, databaseprovider));
             }
         }

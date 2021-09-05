@@ -13,7 +13,7 @@ using ShikimoriSharp.Settings;
 
 namespace Neptunia_library.DataBaseProviders
 {
-    public class ShikimoriDataBaseProvider : IDataBaseProvider
+    public class ShikimoriDataBaseProvider : IDataBaseProvider, IGetDependencies
     {
         private ShikimoriClient _client;
         

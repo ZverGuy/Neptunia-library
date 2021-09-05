@@ -13,7 +13,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Neptunia_library.ContentSources
 {
-    public class YummiAnimeContentSourceProvider : IContentSourceProvider
+    public class YummiAnimeContentSourceProvider : IContentSourceProvider, IGetDependencies
     {
         public  HttpClient _client;
 

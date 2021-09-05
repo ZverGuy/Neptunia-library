@@ -13,7 +13,7 @@ namespace Neptunia_library.Builders
         private ICacheService _cacheService;
         private IUserAgentStorage _userAgentStorage;
         private IWebDriver _webDriver;
-        private ISearchEngine _searchEngine;
+        private Type _searchEngineType;
         private IServiceCollection _dependencyInjection;
 
         public ParserEngineBuilder ConfigureDataBaseProviders(Action<DataBaseProviderOptions> options)
@@ -63,9 +63,9 @@ namespace Neptunia_library.Builders
             return this;
         }
 
-        public ParserEngineBuilder SetSearchEngine(ISearchEngine searchEngine)
+        public ParserEngineBuilder SetSearchEngine(Type searchEngine)
         {
-            _searchEngine = searchEngine;
+            _searchEngineType = searchEngine;
             return this;
         }
         
@@ -75,7 +75,7 @@ namespace Neptunia_library.Builders
         public ParserEngine Build()
         {
             ParserEngine engine =
-                new ParserEngine(_contentSourceProviderOptions, _dataBaseProviderOptions, _dependencyInjection,_searchEngine, _cacheService, _userAgentStorage, _webDriver);
+                new ParserEngine(_contentSourceProviderOptions, _dataBaseProviderOptions, _dependencyInjection,_searchEngineType, _cacheService, _userAgentStorage, _webDriver);
             return engine;
 
         }
@@ -83,7 +83,7 @@ namespace Neptunia_library.Builders
         public FluentParserEngine BuildFluent()
         {
             ParserEngine engine =
-                new ParserEngine(_contentSourceProviderOptions, _dataBaseProviderOptions,_dependencyInjection,_searchEngine, _cacheService, _userAgentStorage, _webDriver);
+                new ParserEngine(_contentSourceProviderOptions, _dataBaseProviderOptions,_dependencyInjection,_searchEngineType, _cacheService, _userAgentStorage, _webDriver);
             FluentParserEngine fluentParserEngine = new FluentParserEngine(engine);
             return fluentParserEngine;
         }
