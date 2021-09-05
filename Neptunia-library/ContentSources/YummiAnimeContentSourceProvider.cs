@@ -13,11 +13,11 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Neptunia_library.ContentSources
 {
-    public class YummiAnimeContentSourceProvider : AbstractContentSourceProvider
+    public class YummiAnimeContentSourceProvider : IContentSourceProvider
     {
         public  HttpClient _client;
 
-        public override string SiteUrl => defaultUrl;
+        public  string SiteUrl => defaultUrl;
         public IWebDriver WebDriver { get; set; }
         
         private const string defaultUrl = "https://yummyanime.club/";
@@ -31,12 +31,12 @@ namespace Neptunia_library.ContentSources
         {
             
         }
-        public override void GetServices(IServiceProvider provider)
+        public  void OnGettingDependencyServices(IServiceProvider provider)
         {
             WebDriver = provider.GetService<IWebDriver>();
         }
 
-        public override IContentSource GetContent(string contentname, string userAgent = null)
+        public IContentSource GetContent(string contentname, string userAgent = null)
         {
             ContentSourceWithSubSources result = new ContentSourceWithSubSources();
             
@@ -88,7 +88,7 @@ namespace Neptunia_library.ContentSources
 
       
 
-        public override Task<IContentSource> GetContentAsync(string contentname)
+        public Task<IContentSource> GetContentAsync(string contentname)
         {
             throw new System.NotImplementedException();
         }

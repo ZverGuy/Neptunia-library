@@ -40,16 +40,16 @@ namespace Neptunia_library
             //Getting ContentProvicers
             foreach (var variable in contentOptions.ContentSourceProviders)
             {
-                AbstractContentSourceProvider contentprovider = (AbstractContentSourceProvider)Activator.CreateInstance(variable.Item2);
-                contentprovider.GetServices(_serviceProvider);
+                IContentSourceProvider contentprovider = (IContentSourceProvider)Activator.CreateInstance(variable.Item2);
+                contentprovider.OnGettingDependencyServices(_serviceProvider);
                 _contentSourceProviders.Add((variable.Item1, contentprovider));
             }
             
             //Getting DataBaseProviders
             foreach (var variable in dataBaseOptions.DataBaseProvider)
             {
-                AbstractDataBaseProvider databaseprovider = (AbstractDataBaseProvider)Activator.CreateInstance(variable.Item2);
-                databaseprovider.GetServices(_serviceProvider);
+                IDataBaseProvider databaseprovider = (IDataBaseProvider)Activator.CreateInstance(variable.Item2);
+                databaseprovider.OnGettingDependencyServices(_serviceProvider);
                 _dataBaseProviders.Add((variable.Item1, databaseprovider));
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Neptunia_library.DTOs;
@@ -7,6 +8,7 @@ namespace Neptunia_library.Interfaces
 {
     public interface IDataBaseProvider
     {
+        void OnGettingDependencyServices(IServiceProvider provider);
         DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null);
         Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName);
     }

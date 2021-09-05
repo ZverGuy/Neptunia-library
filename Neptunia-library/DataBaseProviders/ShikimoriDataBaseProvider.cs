@@ -13,7 +13,7 @@ using ShikimoriSharp.Settings;
 
 namespace Neptunia_library.DataBaseProviders
 {
-    public class ShikimoriDataBaseProvider : AbstractDataBaseProvider
+    public class ShikimoriDataBaseProvider : IDataBaseProvider
     {
         private ShikimoriClient _client;
         
@@ -22,14 +22,14 @@ namespace Neptunia_library.DataBaseProviders
         
 
 
-        public override void GetServices(IServiceProvider provider)
+        public void OnGettingDependencyServices(IServiceProvider provider)
         {
             WebDriver = provider.GetService<IWebDriver>();
             var setting = provider.GetService<ClientSettings>();
             _client = new ShikimoriClient(null, setting);
         }
 
-        public override DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null)
+        public  DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null)
         {
             Anime info = _client.Animes.GetAnime(new AnimeRequestSettings()
             {
@@ -47,7 +47,7 @@ namespace Neptunia_library.DataBaseProviders
         }
         
 
-        public override Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName)
+        public  Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName)
         {
             throw new System.NotImplementedException();
         }
