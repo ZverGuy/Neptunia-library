@@ -15,52 +15,34 @@ using OpenQA.Selenium;
 
 namespace Neptunia_library
 {
-    public class ParserEngine
+    public partial class ParserEngine
     {
         private readonly List<ValueTuple<ContentTypeEnum, IContentSourceProvider>> _contentSourceProviders;
         private readonly List<(ContentTypeEnum, IDataBaseProvider)> _dataBaseProviders;
-        private readonly ICacheService _service;
-        private readonly IUserAgentStorage _userAgentStorage;
-        private readonly ISearchEngine _searchEngine;
+        private ICacheService _service;
+        private IUserAgentStorage _userAgentStorage;
+        private ISearchEngine _searchEngine;
         private readonly IServiceProvider _serviceProvider;
 
         internal ParserEngine(ContentSourceProviderOptions contentOptions, 
                               DataBaseProviderOptions dataBaseOptions, 
-                              IServiceCollection serviceCollection, 
-                              [AllowNull] Type searchEngine = null, 
-                              [AllowNull] ICacheService service = null, 
-                              [AllowNull] IUserAgentStorage userAgentStorage = null, 
-                              [AllowNull] IWebDriver webDriver = null)
+                              IServiceCollection serviceCollection)
         {
             _contentSourceProviders = new List<(ContentTypeEnum, IContentSourceProvider)>();
             _dataBaseProviders = new List<(ContentTypeEnum, IDataBaseProvider)>();
-            
             _serviceProvider = serviceCollection.BuildServiceProvider();
             
+            
+            
             //Getting ContentProvicers
-            foreach (var variable in contentOptions.ContentSourceProviders)
-            {
-                IContentSourceProvider contentprovider = (IContentSourceProvider)Activator.CreateInstance(variable.Item2);
-
-                if (contentprovider is IGetDependencies dep)
-                {
-                    dep.OnGettingDependencyServices(_serviceProvider);
-                }
-                _contentSourceProviders.Add((variable.Item1, contentprovider));
-            }
+            InitContentSourceProviders(contentOptions.ContentSourceProviders);
             
             //Getting DataBaseProviders
-            foreach (var variable in dataBaseOptions.DataBaseProvider)
-            {
-                IDataBaseProvider databaseprovider = (IDataBaseProvider)Activator.CreateInstance(variable.Item2);
-
-                if (databaseprovider is IGetDependencies dep)
-                {
-                    dep.OnGettingDependencyServices(_serviceProvider);
-                }
-                _dataBaseProviders.Add((variable.Item1, databaseprovider));
-            }
+            InitDataBaseProviders(dataBaseOptions.DataBaseProvider);
         }
+
+       
+
 
         public DataBaseProviderInfo GetContentInfoFromDataBaseProvider(string contentname, ContentTypeEnum contentType)
         {

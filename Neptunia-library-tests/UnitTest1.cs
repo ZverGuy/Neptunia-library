@@ -9,6 +9,7 @@ using Neptunia_library.DataBaseProviders;
 using Neptunia_library.DTOs;
 using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
+using Neptunia_library.SearchEngines;
 using NUnit.Framework;
 using OpenQA.Selenium.Firefox;
 using ShikimoriSharp;
@@ -26,16 +27,17 @@ namespace Neptunia_library_tests
             FirefoxOptions ffOptions = new FirefoxOptions();
 
             _engine = builder.ConfigureContentSourceProviders(options =>
-            {
-                options.RegisterContentSourceProvider<YummiAnimeContentSourceProvider>(ContentTypeEnum.Anime);
-            }).ConfigureDataBaseProviders(options =>
-            {
-                options.RegisterDataBaseProvider<ShikimoriDataBaseProvider>(ContentTypeEnum.Anime);
-            }).ConfigureServices(collection =>
-            {
-                collection.AddSingleton<ClientSettings, ClientSettings>(sp  => new ClientSettings("NETptunia",
-                    "rfCMhnjMK4tHpdhCfQdkZINmtCQlusiNIAug-td6YuM", "ny2JtKgQujhVzLg1N6IM9frLrVqUbQEfhc0Q6x0cWiM"));
-            }).Build();
+                {
+                    options.RegisterContentSourceProvider<YummiAnimeContentSourceProvider>(ContentTypeEnum.Anime);
+                }).ConfigureDataBaseProviders(options =>
+                {
+                    options.RegisterDataBaseProvider<ShikimoriDataBaseProvider>(ContentTypeEnum.Anime);
+                }).ConfigureServices(collection =>
+                {
+                    collection.AddSingleton<ClientSettings, ClientSettings>(sp => new ClientSettings("NETptunia",
+                        "rfCMhnjMK4tHpdhCfQdkZINmtCQlusiNIAug-td6YuM", "ny2JtKgQujhVzLg1N6IM9frLrVqUbQEfhc0Q6x0cWiM"));
+                }).SetSearchEngine<SearxSearchEngine>()
+                .Build();
         }
 
         [Test]
