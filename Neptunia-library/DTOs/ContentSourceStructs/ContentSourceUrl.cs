@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Neptunia_library.DTOs.ContentSourceStructs
 {
-    public struct EnumerableContentSourceUrl
+    public class ContentSourceUrl
     {
         public string UrlToContent { get; set; }
         public bool ItsCached { get; set; }

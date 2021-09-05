@@ -7,12 +7,13 @@ namespace Neptunia_library.Builders.BuilderOptions
 {
     public class DataBaseProviderOptions
     {
-        public List<ValueTuple<ContentTypeEnum,IDataBaseProvider>> DataBaseProvider { get; private set; } = new List<(ContentTypeEnum, IDataBaseProvider)>();
 
-        public void RegisterDataBaseProvider<T>(ContentTypeEnum contentType,object[] args) where T : IDataBaseProvider
+        public List<ValueTuple<ContentTypeEnum, Type>> DataBaseProvider { get; private set; } =
+            new List<(ContentTypeEnum, Type)>();
+
+        public void RegisterDataBaseProvider<T>(ContentTypeEnum contentType) where T : IDataBaseProvider
         {
-            IDataBaseProvider provider = (IDataBaseProvider)Activator.CreateInstance(typeof(T), args);
-            DataBaseProvider.Add(new ValueTuple<ContentTypeEnum, IDataBaseProvider>(contentType, provider));
+            DataBaseProvider.Add(new ValueTuple<ContentTypeEnum, Type>(contentType, typeof(T)));
         }
         
         internal DataBaseProviderOptions() {}

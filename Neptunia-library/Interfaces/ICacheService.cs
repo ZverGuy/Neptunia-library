@@ -5,7 +5,7 @@ namespace Neptunia_library.Interfaces
 {
     public interface ICacheService
     {
-        ParsedContent GetContent(string id);
-        Task<ParsedContent> GetContentAsync(string id);
+        ParsedContent GetCachedContent(object id);
+        Task<ParsedContent> GetCachedContentAsync(object id);
     }
 }

@@ -5,7 +5,7 @@ using Neptunia_library.Interfaces;
 
 namespace Neptunia_library.DTOs
 {
-    public struct ParsedContent
+    public class ParsedContent
     {
         public ContentTypeEnum? ContentType { get; private set; }
         public string Name { get; private set; }

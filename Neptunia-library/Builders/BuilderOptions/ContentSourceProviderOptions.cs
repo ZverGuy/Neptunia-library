@@ -8,18 +8,17 @@ namespace Neptunia_library.Builders
 {
     public class ContentSourceProviderOptions
     {
-        public List<ValueTuple<ContentTypeEnum, IContentSourceProvider>> ContentSourceProviders { get; private set; }
+        public List<ValueTuple<ContentTypeEnum, Type>> ContentSourceProviders { get; private set; }
 
         internal ContentSourceProviderOptions()
         {
-            ContentSourceProviders = new List<(ContentTypeEnum, IContentSourceProvider)>();
+            ContentSourceProviders = new List<(ContentTypeEnum, Type)>();
         }
 
-        public void RegisterContentSourceProvider<T>(ContentTypeEnum typeEnum, object[] args)
+        public void RegisterContentSourceProvider<T>(ContentTypeEnum typeEnum)
             where T : IContentSourceProvider
         {
-            IContentSourceProvider contentSourceProvider = (IContentSourceProvider)Activator.CreateInstance(typeof(T), args);
-            ContentSourceProviders.Add(new ValueTuple<ContentTypeEnum, IContentSourceProvider>(typeEnum, contentSourceProvider));
+            ContentSourceProviders.Add(new ValueTuple<ContentTypeEnum, Type>(typeEnum, typeof(T)));
         }
     }
 }

@@ -7,13 +7,17 @@
 
     <ItemGroup>
       <Folder Include="CacheServices" />
-      <Folder Include="ContentSources" />
-      <Folder Include="DataBaseProviders" />
       <Folder Include="Extensions" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+      <PackageReference Include="Selenium.Support" Version="3.141.0" />
+      <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+      <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="92.0.4515.10700" />
+      <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.29.1" />
+      <PackageReference Include="ShikimoriSharp" Version="1.3.1" />
     </ItemGroup>
 
 </Project>
