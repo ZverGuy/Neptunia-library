@@ -1,4 +1,29 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5fe276df_002Daa25_002D4f51_002D9e1c_002Dae541ef1f969/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Neptunia-library-tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Project Location="C:\Users\Max\RiderProjects\Neptunia-library\Neptunia-library-tests" Presentation="&amp;lt;Neptunia-library-tests&amp;gt;" /&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=177A3C7A_002DA20D_002D4A30_002DBB85_002D12B63574D201_002Ff_003AParserEngine_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a2b9ff06_002Dc35e_002D4b1e_002D8d8a_002D497f8ad020a8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FullTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.FullTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b6723edc_002Da139_002D4778_002Da6a7_002Da6dd865724ff/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ContentSourceProviderTest #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.ContentSourceProviderTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e43d26fc_002Daf5a_002D487d_002Dba92_002D5430bd1d3ddc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ContentSourceProviderTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.ContentSourceProviderTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e7fb6989_002Dd5e0_002D42b8_002Db9eb_002D9c8e713ac0e2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ContentSourceProviderTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.FullTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ffe5dcf3_002D11c8_002D437d_002D8a5e_002D487ee9613289/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ContentSourceProviderTest #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.ContentSourceProviderTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	</wpf:ResourceDictionary>

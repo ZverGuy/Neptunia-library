@@ -17,67 +17,63 @@ namespace Neptunia_library.ContentSources
     public class YummiAnimeContentSourceProvider : IContentSourceProvider
     {
         private HttpClient _client;
+        private IUserAgentStorage _userAgentStorage;
 
-        public  string SiteUrl => defaultUrl;
-        private IWebDriver WebDriver { get; set; }
+        public string SiteUrl => defaultUrl.Replace("https://", string.Empty).Replace("/", string.Empty);
         
+
         public ContentTypeEnum ContentType => ContentTypeEnum.Anime;
         
         private const string defaultUrl = "https://yummyanime.club/";
 
         private const string searchUrl = "https://yummyanime.club/search?word=";
 
-        private const string _userAgent =
-            "Mozilla/5.0 (Linux; Android 10; SM-A307FN Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.82 Mobile Safari/537.36";
-        
+        public YummiAnimeContentSourceProvider(IUserAgentStorage userAgentStorage)
+        {
+            _userAgentStorage = userAgentStorage;
+            _client = new HttpClient();
+        }
 
-       
+
+
 
         public IContentSource GetContent(string contentname, string userAgent = null)
         {
             ContentSourceWithSubSources result = new ContentSourceWithSubSources();
+            result.ContentSourceName = "Yummy Anime";
+            result.UrlToContentPage = contentname;
             
-            List<SubContentSource> subContentSources = new List<SubContentSource>();
-            
-            
-            WebDriver.Navigate().GoToUrl(searchUrl + contentname);
-            new WebDriverWait(WebDriver, TimeSpan.FromSeconds(10))
-                .Until(x => x.FindElements(By.CssSelector("div.anime-column")));
-
             HtmlDocument document = new HtmlDocument();
-            string xpath = WebDriver.PageSource.Replace("\r\n", String.Empty);
-            document.Load(xpath);
-            HtmlNode animeColumn = document.DocumentNode.SelectSingleNode("//div[@class=\"anime-column\"]");
 
-            result.UrlToContentPage = defaultUrl + animeColumn.SelectSingleNode("//div/a").Attributes["href"].Value;
-            
-            result.ContentName = animeColumn.SelectSingleNode("/html/body/div[2]/div[2]/div[3]/div/div/div/div[1]/div/a").InnerText;
-
-            _client.DefaultRequestHeaders.Add("user-agent", userAgent ?? _userAgent);
-            
-            string contentPage = _client.GetStringAsync(result.UrlToContentPage).Result;
-            
+            _client.DefaultRequestHeaders.Add("user-agent", _userAgentStorage.GetRandomUserAgent());
+            string contentPage = _client.GetStringAsync(contentname).Result;
             document = new HtmlDocument() { Text = contentPage };
             document.LoadHtml(contentPage);
+
             HtmlNodeCollection seriesCollecion = document.DocumentNode.SelectNodes("//div[@class='video-block']");
 
-            foreach (HtmlNode videoblock in seriesCollecion)
+            result.ContentName = document.DocumentNode.SelectSingleNode("//h1[1]").InnerText;
+           
+            
+
+            for (int i = 1; i <= seriesCollecion.Count; i++)
             {
-                SubContentSource videoUrls = new SubContentSource();
-                List<ContentSourceUrl> urls = new List<ContentSourceUrl>();
-                videoUrls.SubContentSourceName = videoblock.SelectSingleNode("/div/div").InnerText;
-                
-                foreach (var urlNode in videoblock.SelectNodes("/div[2]/div/div/div"))
+                SubContentSource videodub = new SubContentSource();
+                videodub.Urls = new List<ContentSourceUrl>();
+                videodub.SubContentSourceName = document.DocumentNode
+                    .SelectSingleNode($"//div[@class='video-block'][{i}]/div/div").InnerText;
+                HtmlNodeCollection videoNodes =
+                    document.DocumentNode.SelectNodes(
+                        $"//div[@class='video-block'][{i}]//div[@class=\"block-episodes\"]/div");
+                for (int j = 1; j < videoNodes.Count; j++)
                 {
-                    urls.Add(new ContentSourceUrl()
+                    videodub.Urls.Add(new ContentSourceUrl()
                     {
-                        UrlToContent = urlNode.Attributes["data-href"].Value,
+                        UrlToContent = document.DocumentNode.SelectSingleNode($"//div[@class='video-block'][{i}]//div[@class=\"block-episodes\"]/div[{j}]").Attributes["data-href"].Value,
                         ItsCached = false,
                     });
                 }
-
-                videoUrls.Urls = urls;
-                subContentSources.Add(videoUrls);
+                result.SubContentSources.Add(videodub);
             }
 
             return result;

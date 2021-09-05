@@ -15,7 +15,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.Firefox;
 using ShikimoriSharp;
 using ShikimoriSharp.Bases;
-
+using Newtonsoft.Json;
 namespace Neptunia_library_tests
 {
     public class InitializationTests
@@ -39,30 +39,29 @@ namespace Neptunia_library_tests
                         "rfCMhnjMK4tHpdhCfQdkZINmtCQlusiNIAug-td6YuM", "ny2JtKgQujhVzLg1N6IM9frLrVqUbQEfhc0Q6x0cWiM"));
                 })
                 .SetSearchEngine<SearxSearchEngine>((sp) =>
-                    new SearxSearchEngine("https://searx.tiekoetter.com/", sp.GetService<IUserAgentStorage>()))
+                    new SearxSearchEngine("https://searx.roughs.ru/", sp.GetService<IUserAgentStorage>()))
                 .SetUserAgentStorage<InMemoryUserAgentStorage>()
                 .Build();
         }
 
         [Test]
-        public void DataBaseProviderTest()
+        public void FullTest()
         {
-            DataBaseProviderInfo parsedinfo = _engine.GetContentInfoFromDataBaseProvider("JoJo no Kimyou na Bouken", ContentTypeEnum.Anime);
-            TestContext.WriteLine(parsedinfo.Name);
-            TestContext.WriteLine(parsedinfo.Description);
-            TestContext.WriteLine(parsedinfo.UrlToContent);
-            TestContext.WriteLine(parsedinfo.UserScore);
-            Assert.NotNull(parsedinfo);
-        }
+            ParsedContentBuilder contentBuilder = new ParsedContentBuilder();
+            DataBaseProviderInfo info =
+                _engine.GetContentInfoFromDataBaseProvider("Fate Stay Night", ContentTypeEnum.Anime);
+            IEnumerable<IContentSource> contentSources =
+                _engine.GetContentInfoFromContentSources("Fate Stay Night", ContentTypeEnum.Anime);
 
-        [Test]
-        public void ContentSourceProviderTest()
-        {
-            List<IContentSource> content = _engine.GetContentInfoFromContentSources("JoJo no Kimyou na Bouken", ContentTypeEnum.Anime).ToList();
-            foreach (var VARIABLE in content)
-            {
-                Assert.IsNotEmpty(VARIABLE.UrlToContentPage);
-            }
+            ParsedContent result = contentBuilder.SetMainInfo(info).SetContentFromContentSources(contentSources)
+                .BuildContent(ContentTypeEnum.Anime);
+            
+            Assert.NotNull(info);
+            Assert.NotNull(contentSources);
+
+            string test = JsonConvert.SerializeObject(result);
+            TestContext.WriteLine(test);
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Neptunia_library.Builders;
@@ -17,8 +18,6 @@ namespace Neptunia_library
 {
     public partial class ParserEngine
     {
-        private readonly List<ValueTuple<ContentTypeEnum, IContentSourceProvider>> _contentSourceProviders;
-        private readonly List<(ContentTypeEnum, IDataBaseProvider)> _dataBaseProviders;
         private ICacheService? _service;
         private IUserAgentStorage? _userAgentStorage;
         private ISearchEngine? _searchEngine;
@@ -26,17 +25,17 @@ namespace Neptunia_library
 
         internal ParserEngine(IServiceCollection serviceCollection)
         {
-            
+
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
             _service = _serviceProvider.GetService<ICacheService>();
             _userAgentStorage = _serviceProvider.GetService<IUserAgentStorage>();
             _searchEngine = _serviceProvider.GetService<ISearchEngine>();
-            
-           
+
+
         }
 
-       
+
 
 
         public DataBaseProviderInfo GetContentInfoFromDataBaseProvider(string contentname, ContentTypeEnum contentType)
@@ -55,7 +54,7 @@ namespace Neptunia_library
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    continue;      //sorry
+                    continue; //sorry
                 }
             }
 
@@ -70,26 +69,34 @@ namespace Neptunia_library
             ContentTypeEnum contentType)
         {
             List<IContentSource> resultList = new List<IContentSource>();
+            Regex urlregex = new Regex(@"\/\/(.+?)\/");
             List<IContentSourceProvider> validProviders = _serviceProvider.GetServices<IContentSourceProvider>()
                 .Where(x => x.ContentType == contentType).ToList();
 
-            SearchEngineResult searchEngineResult = _searchEngine.GetSearchResults(contentName, validProviders).First();
-            foreach (IContentSourceProvider provider in validProviders)
+            IEnumerable<SearchEngineResult> searchEngineResult =
+                _searchEngine.GetSearchResults(contentName, validProviders);
+            foreach (SearchEngineResult result in searchEngineResult)
             {
                 try
                 {
-                    IContentSource parserResult = provider.GetContent(searchEngineResult.Url);
-                    resultList.Add(parserResult);
+                    foreach (var contentSourceProvider in validProviders)
+                    {
+                        if (urlregex.Match(result.Url).Groups[1].Value == contentSourceProvider.SiteUrl)
+                        {
+                            resultList.Add(contentSourceProvider.GetContent(result.Url));
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    continue;      //sorry
+                    continue;
                 }
+              
             }
 
             return resultList;
         }
-        }
 
+    }
 }

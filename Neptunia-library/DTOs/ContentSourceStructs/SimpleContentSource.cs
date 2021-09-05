@@ -11,5 +11,10 @@ namespace Neptunia_library.DTOs.ContentSourceStructs
         public string UrlToContentPage { get; set; }
         public Dictionary<string, string> ParserParameters { get; set; }
         public ContentSourceUrl Source;
+
+        public SimpleContentSource()
+        {
+            ParserParameters = new Dictionary<string, string>();
+        }
     }
 }

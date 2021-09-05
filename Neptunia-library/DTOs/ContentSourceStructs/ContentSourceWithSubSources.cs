@@ -10,5 +10,11 @@ namespace Neptunia_library.DTOs.ContentSourceStructs
         public string UrlToContentPage { get; set; }
         public Dictionary<string, string> ParserParameters { get; set; }
         public List<SubContentSource> SubContentSources { get; set; }
+
+        public ContentSourceWithSubSources()
+        {
+            ParserParameters = new Dictionary<string, string>();
+            SubContentSources = new List<SubContentSource>();
+        }
     }
 }
