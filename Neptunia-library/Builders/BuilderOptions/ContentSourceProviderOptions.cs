@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Mime;
+using Microsoft.Extensions.DependencyInjection;
 using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
 
@@ -8,17 +9,17 @@ namespace Neptunia_library.Builders
 {
     public class ContentSourceProviderOptions
     {
-        public List<ValueTuple<ContentTypeEnum, Type>> ContentSourceProviders { get; private set; }
+        private IServiceCollection _collection;
 
-        internal ContentSourceProviderOptions()
+        internal ContentSourceProviderOptions(IServiceCollection collection)
         {
-            ContentSourceProviders = new List<(ContentTypeEnum, Type)>();
+            _collection = collection;
         }
 
-        public void RegisterContentSourceProvider<T>(ContentTypeEnum typeEnum)
-            where T : IContentSourceProvider
+        public void RegisterContentSourceProvider<TContentSourceProvider>(ContentTypeEnum typeEnum)
+            where TContentSourceProvider : class, IContentSourceProvider
         {
-            ContentSourceProviders.Add(new ValueTuple<ContentTypeEnum, Type>(typeEnum, typeof(T)));
+            _collection.AddScoped<IContentSourceProvider, TContentSourceProvider>();
         }
     }
 }

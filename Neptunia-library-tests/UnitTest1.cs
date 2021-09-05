@@ -10,6 +10,7 @@ using Neptunia_library.DTOs;
 using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
 using Neptunia_library.SearchEngines;
+using Neptunia_library.UserAgentStorages;
 using NUnit.Framework;
 using OpenQA.Selenium.Firefox;
 using ShikimoriSharp;
@@ -36,7 +37,10 @@ namespace Neptunia_library_tests
                 {
                     collection.AddSingleton<ClientSettings, ClientSettings>(sp => new ClientSettings("NETptunia",
                         "rfCMhnjMK4tHpdhCfQdkZINmtCQlusiNIAug-td6YuM", "ny2JtKgQujhVzLg1N6IM9frLrVqUbQEfhc0Q6x0cWiM"));
-                }).SetSearchEngine<SearxSearchEngine>()
+                })
+                .SetSearchEngine<SearxSearchEngine>((sp) =>
+                    new SearxSearchEngine("https://searx.tiekoetter.com/", sp.GetService<IUserAgentStorage>()))
+                .SetUserAgentStorage<InMemoryUserAgentStorage>()
                 .Build();
         }
 

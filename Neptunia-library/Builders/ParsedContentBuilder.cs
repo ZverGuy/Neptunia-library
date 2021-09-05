@@ -23,14 +23,14 @@ namespace Neptunia_library.Builders
             return this;
         }
 
-        public ParsedContent BuildContent([AllowNull] ContentTypeEnum contentType = default)
+        public ParsedContent BuildContent(ContentTypeEnum contentType)
         {
             ParsedContent content = new ParsedContent(
                 _dataBaseProviderInfo.Name,
                 _dataBaseProviderInfo.Description,
                 _dataBaseProviderInfo.UserScore,
                 _dataBaseProviderInfo.UrlToContent,
-                _contentSources, contentType);
+                _contentSources, contentType != default ? contentType : ContentTypeEnum.Anime);
             return content;
         }
 

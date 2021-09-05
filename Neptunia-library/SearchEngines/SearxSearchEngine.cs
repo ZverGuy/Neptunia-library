@@ -13,17 +13,19 @@ namespace Neptunia_library.SearchEngines
     {
         private readonly string _sitesUrl;
         private string _searchUrl => _sitesUrl + "search?q=";
+        private IUserAgentStorage _storage;
 
-        public SearxSearchEngine(string searxInstancesUrl)
+        public SearxSearchEngine(string searxInstancesUrl, IUserAgentStorage userAgentStorage)
         {
             _sitesUrl = searxInstancesUrl;
+            _storage = userAgentStorage;
         }
         public IEnumerable<SearchEngineResult> GetSearchResults(string searchquery, IEnumerable<IContentSourceProvider> sites)
         {
             using (HttpClient client = new HttpClient())
             {
                 var searchstring = GetSearchQueryWithDorks(searchquery, sites);
-                //client.DefaultRequestHeaders.Add("user-agent",);
+                client.DefaultRequestHeaders.Add("user-agent", _storage.GetRandomUserAgent());
                 throw new NotImplementedException();
             }
         }

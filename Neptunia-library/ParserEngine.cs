@@ -19,26 +19,21 @@ namespace Neptunia_library
     {
         private readonly List<ValueTuple<ContentTypeEnum, IContentSourceProvider>> _contentSourceProviders;
         private readonly List<(ContentTypeEnum, IDataBaseProvider)> _dataBaseProviders;
-        private ICacheService _service;
-        private IUserAgentStorage _userAgentStorage;
-        private ISearchEngine _searchEngine;
+        private ICacheService? _service;
+        private IUserAgentStorage? _userAgentStorage;
+        private ISearchEngine? _searchEngine;
         private readonly IServiceProvider _serviceProvider;
 
-        internal ParserEngine(ContentSourceProviderOptions contentOptions, 
-                              DataBaseProviderOptions dataBaseOptions, 
-                              IServiceCollection serviceCollection)
+        internal ParserEngine(IServiceCollection serviceCollection)
         {
-            _contentSourceProviders = new List<(ContentTypeEnum, IContentSourceProvider)>();
-            _dataBaseProviders = new List<(ContentTypeEnum, IDataBaseProvider)>();
+            
             _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            _service = _serviceProvider.GetService<ICacheService>();
+            _userAgentStorage = _serviceProvider.GetService<IUserAgentStorage>();
+            _searchEngine = _serviceProvider.GetService<ISearchEngine>();
             
-            
-            
-            //Getting ContentProvicers
-            InitContentSourceProviders(contentOptions.ContentSourceProviders);
-            
-            //Getting DataBaseProviders
-            InitDataBaseProviders(dataBaseOptions.DataBaseProvider);
+           
         }
 
        
@@ -47,10 +42,9 @@ namespace Neptunia_library
         public DataBaseProviderInfo GetContentInfoFromDataBaseProvider(string contentname, ContentTypeEnum contentType)
         {
             DataBaseProviderInfo info = new DataBaseProviderInfo();
-            List<IDataBaseProvider> dataBaseProviders = _dataBaseProviders
-                .Where(x => x.Item1.HasFlag(contentType))
-                .Select(x => x.Item2).ToList();
-            
+            List<IDataBaseProvider> dataBaseProviders = _serviceProvider.GetServices<IDataBaseProvider>()
+                .Where(x => x.ContentType == contentType).ToList();
+
             foreach (IDataBaseProvider provider in dataBaseProviders)
             {
                 try
@@ -76,10 +70,8 @@ namespace Neptunia_library
             ContentTypeEnum contentType)
         {
             List<IContentSource> resultList = new List<IContentSource>();
-            List<IContentSourceProvider> validProviders = _contentSourceProviders
-                .Where(x => x.Item1.HasFlag(contentType))
-                .Select(y => y.Item2)
-                .ToList();
+            List<IContentSourceProvider> validProviders = _serviceProvider.GetServices<IContentSourceProvider>()
+                .Where(x => x.ContentType == contentType).ToList();
 
             SearchEngineResult searchEngineResult = _searchEngine.GetSearchResults(contentName, validProviders).First();
             foreach (IContentSourceProvider provider in validProviders)

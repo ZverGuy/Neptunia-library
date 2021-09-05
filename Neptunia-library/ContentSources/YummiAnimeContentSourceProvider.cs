@@ -7,18 +7,21 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.Extensions.DependencyInjection;
 using Neptunia_library.DTOs.ContentSourceStructs;
+using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace Neptunia_library.ContentSources
 {
-    public class YummiAnimeContentSourceProvider : IContentSourceProvider, IGetDependencies
+    public class YummiAnimeContentSourceProvider : IContentSourceProvider
     {
-        public  HttpClient _client;
+        private HttpClient _client;
 
         public  string SiteUrl => defaultUrl;
-        public IWebDriver WebDriver { get; set; }
+        private IWebDriver WebDriver { get; set; }
+        
+        public ContentTypeEnum ContentType => ContentTypeEnum.Anime;
         
         private const string defaultUrl = "https://yummyanime.club/";
 
@@ -26,15 +29,9 @@ namespace Neptunia_library.ContentSources
 
         private const string _userAgent =
             "Mozilla/5.0 (Linux; Android 10; SM-A307FN Build/QP1A.190711.020; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/90.0.4430.82 Mobile Safari/537.36";
+        
 
-        public YummiAnimeContentSourceProvider()
-        {
-            
-        }
-        public  void OnGettingDependencyServices(IServiceProvider provider)
-        {
-            WebDriver = provider.GetService<IWebDriver>();
-        }
+       
 
         public IContentSource GetContent(string contentname, string userAgent = null)
         {

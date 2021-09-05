@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Neptunia_library.DTOs;
+using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
 using OpenQA.Selenium;
 using ShikimoriSharp;
@@ -13,20 +14,18 @@ using ShikimoriSharp.Settings;
 
 namespace Neptunia_library.DataBaseProviders
 {
-    public class ShikimoriDataBaseProvider : IDataBaseProvider, IGetDependencies
+    public class ShikimoriDataBaseProvider : IDataBaseProvider
     {
         private ShikimoriClient _client;
         
         private IWebDriver WebDriver { get;  set; }
-        
-        
+
+        public ContentTypeEnum ContentType => ContentTypeEnum.Anime;
 
 
-        public void OnGettingDependencyServices(IServiceProvider provider)
+        public ShikimoriDataBaseProvider(ClientSettings shikimoriClientSettings)
         {
-            WebDriver = provider.GetService<IWebDriver>();
-            var setting = provider.GetService<ClientSettings>();
-            _client = new ShikimoriClient(null, setting);
+            _client = new ShikimoriClient(null,shikimoriClientSettings);
         }
 
         public  DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null)
