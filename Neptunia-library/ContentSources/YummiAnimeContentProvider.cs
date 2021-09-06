@@ -98,9 +98,10 @@ namespace Neptunia_library.ContentSources
 
       
 
-        public Task<IContent> GetContentAsync(string contentname)
+        public async Task<IContent> GetContentAsync(string contentname)
         {
-            throw new System.NotImplementedException();
+            IContent result = await Task.Run(() => GetContent(contentname));
+            return result;
         }
     }
 }

@@ -11,13 +11,13 @@ using Neptunia_library.Interfaces;
 
 namespace Neptunia_library.SearchEngines
 {
-    public class SearxSearchEngine : ISearchEngine
+    public class SearxHtmlSearchEngine : ISearchEngine
     {
         private readonly string _sitesUrl;
         private string _searchUrl => _sitesUrl + "search?q=";
         private IUserAgentStorage _storage;
 
-        public SearxSearchEngine(string searxInstancesUrl, IUserAgentStorage userAgentStorage)
+        public SearxHtmlSearchEngine(string searxInstancesUrl, IUserAgentStorage userAgentStorage)
         {
             _sitesUrl = searxInstancesUrl;
             _storage = userAgentStorage;

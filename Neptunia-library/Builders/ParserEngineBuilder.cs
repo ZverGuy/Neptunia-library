@@ -1,10 +1,13 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Neptunia_library.Builders.BuilderOptions;
 using Neptunia_library.Interfaces;
 using Neptunia_library.SearchEngines;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
+using Serilog;
+using Serilog.Core;
 
 namespace Neptunia_library.Builders
 {
@@ -22,6 +25,8 @@ namespace Neptunia_library.Builders
         public ParserEngineBuilder()
         {
             _dependencyInjection = new ServiceCollection();
+           
+            
         }
 
         #region BuilderConfiguration
@@ -85,6 +90,12 @@ namespace Neptunia_library.Builders
             return this;
         }
 
+        public ParserEngineBuilder SetLogger(Func<ILogger> factory)
+        {
+            _dependencyInjection.Add(new ServiceDescriptor(typeof(ILogger), factory.Invoke()));
+            return this;
+        }
+
         #endregion
         
         
@@ -93,6 +104,12 @@ namespace Neptunia_library.Builders
 
         public ParserEngine Build()
         {
+            if (!_dependencyInjection.Contains(new ServiceDescriptor(typeof(ILogger), typeof(Logger),
+                ServiceLifetime.Singleton)))
+            {
+                _dependencyInjection.AddSingleton<ILogger, Logger>(sp =>
+                    new LoggerConfiguration().WriteTo.Console().CreateLogger());
+            }
             
             
             ParserEngine engine =
@@ -103,7 +120,7 @@ namespace Neptunia_library.Builders
 
         public FluentParserEngine BuildFluent()
         {
-            ParserEngine engine = this.Build();
+            ParserEngine engine = Build();
             FluentParserEngine fluentParserEngine = new FluentParserEngine(engine);
             return fluentParserEngine;
         }

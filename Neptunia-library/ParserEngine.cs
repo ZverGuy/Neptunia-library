@@ -13,6 +13,7 @@ using Neptunia_library.DTOs;
 using Neptunia_library.Enums;
 using Neptunia_library.Interfaces;
 using OpenQA.Selenium;
+using Serilog;
 
 namespace Neptunia_library
 {
@@ -22,6 +23,7 @@ namespace Neptunia_library
         private IUserAgentStorage? _userAgentStorage;
         private ISearchEngine? _searchEngine;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger _logger;
 
         internal ParserEngine(IServiceCollection serviceCollection)
         {
@@ -31,9 +33,168 @@ namespace Neptunia_library
             _service = _serviceProvider.GetService<ICacheService>();
             _userAgentStorage = _serviceProvider.GetService<IUserAgentStorage>();
             _searchEngine = _serviceProvider.GetService<ISearchEngine>();
+            _logger = _serviceProvider.GetService<ILogger>();
 
 
         }
 
+        public DataBaseProviderInfo SearchContentOnDataBase(ContentRequestSettings settings)
+        {
+            DataBaseProviderInfo result = null;
+            IEnumerable<IContentDataBaseProvider> validProviders = _serviceProvider
+                .GetServices<IContentDataBaseProvider>()
+                .Where(provider => provider.Languages.Contains(settings.Language) &&
+                                   provider.ContentTypes.Contains(settings.ContentType));
+
+            foreach (IContentDataBaseProvider provider in validProviders)
+            {
+                try
+                {
+                    result = provider.GetInfoFromDataBaseService(settings.ContentName);
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    _logger.Warning($"[Warning][DataBaseProvider] \"{provider.ToString()}\" Failed to get info. Go Next");
+                    continue;
+                }
+            }
+
+            if (result == null)
+            {
+                _logger.Error("[Error][DataBaseProvider] Failed to get info from all DataBaseProviders");
+            }
+
+            return result;
+
+        }
+
+        public async Task<DataBaseProviderInfo> SearchContentOnDataBaseAsync(ContentRequestSettings settings)
+        {
+            DataBaseProviderInfo result = null;
+            IEnumerable<IContentDataBaseProvider> validProviders = _serviceProvider
+                .GetServices<IContentDataBaseProvider>()
+                .AsParallel()
+                .Where(provider => provider.Languages.Contains(settings.Language) &&
+                                   provider.ContentTypes.Contains(settings.ContentType));
+
+            foreach (IContentDataBaseProvider provider in validProviders)
+            {
+                try
+                {
+                    result = await provider.GetInfoFromDataBaseServiceAsync(settings.ContentName);
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    _logger.Warning($"[DataBaseProviders] \"{provider.ToString()}\" Failed to get info. Go Next");
+                    continue;
+                }
+            }
+
+            if (result == null)
+            {
+                _logger.Error("[DataBaseProviders] Failed to get info from all DataBaseProviders");
+            }
+
+            return result;
+
+        }
+
+
+        public IEnumerable<IContent> SearchContentByContentProviders(ContentRequestSettings settings)
+        {
+            List<IContent> result = new List<IContent>();
+            Regex urlregex = new Regex(@"\/\/(.+?)\/");
+            IEnumerable<IContentProvider> validProviders = _serviceProvider.GetServices<IContentProvider>()
+                .AsParallel()
+                .Where(provider => provider.ContentTypes.Contains(settings.ContentType) &&
+                                   provider.Languages.Contains(settings.Language));
+            IEnumerable<SearchEngineResult> searchEngineResults = _searchEngine.GetSearchResults(settings.ContentName, validProviders);
+
+            foreach (SearchEngineResult searchEngineResult in searchEngineResults)
+            {
+                foreach (IContentProvider provider in validProviders)
+                {
+                   
+                        if (urlregex.Match(searchEngineResult.Url).Groups[1].Value == provider.SiteUrl)
+                        {
+                            try
+                            {
+                                result.Add(provider.GetContent(searchEngineResult.Url));
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.Warning($"[ContentProviders] \"{provider.ToString()}\" failed to parse content.\r\n Url: {searchEngineResult.Url} \r\nException: {e} ");
+                                continue;
+                            }
+                        }
+                    
+                   
+                }
+            }
+            
+            if (result.Count == 0)
+            {
+                _logger.Error("[ContentProviders] failed get info from all contentproviders");
+            }
+
+            return result;
+            
+        }
+
+
+        public async Task<IEnumerable<IContent>> SearchContentByContentProvidersAsync(ContentRequestSettings settings)
+        {
+            List<IContent> result = new List<IContent>();
+            Regex urlregex = new Regex(@"\/\/(.+?)\/");
+            IEnumerable<IContentProvider> validProviders = _serviceProvider.GetServices<IContentProvider>()
+                .AsParallel()
+                .Where(provider => provider.ContentTypes.Contains(settings.ContentType) &&
+                                   provider.Languages.Contains(settings.Language));
+            IEnumerable<SearchEngineResult> searchEngineResults = _searchEngine.GetSearchResults(settings.ContentName, validProviders);
+            List<Task<IContent>> parsertasks = new List<Task<IContent>>();
+
+            foreach (SearchEngineResult searchEngineResult in searchEngineResults)
+            {
+                foreach (IContentProvider provider in validProviders)
+                {
+
+                    if (urlregex.Match(searchEngineResult.Url).Groups[1].Value == provider.SiteUrl)
+                    {
+                        Task<IContent> task = Task<IContent>.Factory
+                            .StartNew(() => provider.GetContent(searchEngineResult.Url))
+                            .ContinueWith<IContent>((task1) =>
+                                {
+                                    return null;
+                                }, 
+                                TaskContinuationOptions.OnlyOnFaulted);
+                        parsertasks.Add(task);
+
+                    }
+
+                }
+
+            }
+
+            Task.WaitAll(parsertasks.ToArray());
+
+            foreach (var task in parsertasks)
+            {
+                if (task.Exception == null)
+                {
+                    result.Add(task.Result);
+                }
+            }
+
+            if (result.Count == 0)
+            {
+                _logger.Error("[ContentProviders] failed get info from all contentproviders");
+            }
+
+            return result;
+            
+        }
+        }
+
     }
-}

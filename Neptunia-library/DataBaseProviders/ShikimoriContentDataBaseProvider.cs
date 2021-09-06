@@ -49,17 +49,32 @@ namespace Neptunia_library.DataBaseProviders
             DataBaseProviderInfo result = new DataBaseProviderInfo()
             {
                 Name = info.Name,
-                Description = "Where Description????",
-                UrlToContent = "shikimori.one" + info.Url,
-                UserScore = info.Score
+                Description = "No Description",
+                UrlToContent = "https://shikimori.one" + info.Url,
+                UserScore = info.Score,
+                UrlToImage = "https://shikimori.one" + info.Image.Original
             };
             return result;
         }
         
 
-        public  Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName)
+        public async Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName)
         {
-            throw new System.NotImplementedException();
+            Anime[] infos = await _client.Animes.GetAnime(new AnimeRequestSettings()
+            {
+                search = contentName
+            }).ConfigureAwait(false);
+            var info = infos.First();
+
+            DataBaseProviderInfo result = new DataBaseProviderInfo()
+            {
+                Name = info.Name,
+                Description = "No Description",
+                UrlToContent = "https://shikimori.one" + info.Url,
+                UserScore = info.Score,
+                UrlToImage = "https://shikimori.one" + info.Image.Original
+            };
+            return result;
         }
     }
 }

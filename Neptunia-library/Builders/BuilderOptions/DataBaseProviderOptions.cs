@@ -12,7 +12,7 @@ namespace Neptunia_library.Builders.BuilderOptions
 
        
 
-        public void RegisterDataBaseProvider<T>(ContentTypeEnum contentType) where T : class, IContentDataBaseProvider
+        public void RegisterDataBaseProvider<T>() where T : class, IContentDataBaseProvider
         {
             _collection.AddSingleton<IContentDataBaseProvider, T>();
         }
