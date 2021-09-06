@@ -14,11 +14,21 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Neptunia_library.ContentSources
 {
-    public class YummiAnimeContentSourceProvider : IContentSourceProvider
+    public class YummiAnimeContentProvider : IContentProvider
     {
         private HttpClient _client;
         private IUserAgentStorage _userAgentStorage;
 
+        public IEnumerable<string> ContentTypes => new[]
+        {
+            "Anime"
+        };
+
+        public IEnumerable<string> Languages => new[]
+        {
+            "Russian"
+        };
+        
         public string SiteUrl => defaultUrl.Replace("https://", string.Empty).Replace("/", string.Empty);
         
 
@@ -28,7 +38,7 @@ namespace Neptunia_library.ContentSources
 
         private const string searchUrl = "https://yummyanime.club/search?word=";
 
-        public YummiAnimeContentSourceProvider(IUserAgentStorage userAgentStorage)
+        public YummiAnimeContentProvider(IUserAgentStorage userAgentStorage)
         {
             _userAgentStorage = userAgentStorage;
             _client = new HttpClient();
@@ -37,34 +47,41 @@ namespace Neptunia_library.ContentSources
 
 
 
-        public IContentSource GetContent(string contentname, string userAgent = null)
+        public IContent GetContent(string contentname, string userAgent = null)
         {
-            ContentSourceWithSubSources result = new ContentSourceWithSubSources();
+            ContentWithSubSources result = new ContentWithSubSources();
+            
             result.ContentSourceName = "Yummy Anime";
+            
             result.UrlToContentPage = contentname;
             
             HtmlDocument document = new HtmlDocument();
 
             _client.DefaultRequestHeaders.Add("user-agent", _userAgentStorage.GetRandomUserAgent());
+            
             string contentPage = _client.GetStringAsync(contentname).Result;
+            
             document = new HtmlDocument() { Text = contentPage };
+            
             document.LoadHtml(contentPage);
 
             HtmlNodeCollection seriesCollecion = document.DocumentNode.SelectNodes("//div[@class='video-block']");
 
             result.ContentName = document.DocumentNode.SelectSingleNode("//h1[1]").InnerText;
-           
             
-
             for (int i = 1; i <= seriesCollecion.Count; i++)
             {
                 SubContentSource videodub = new SubContentSource();
+                
                 videodub.Urls = new List<ContentSourceUrl>();
+                
                 videodub.SubContentSourceName = document.DocumentNode
                     .SelectSingleNode($"//div[@class='video-block'][{i}]/div/div").InnerText;
+                
                 HtmlNodeCollection videoNodes =
                     document.DocumentNode.SelectNodes(
                         $"//div[@class='video-block'][{i}]//div[@class=\"block-episodes\"]/div");
+                
                 for (int j = 1; j < videoNodes.Count; j++)
                 {
                     videodub.Urls.Add(new ContentSourceUrl()
@@ -81,7 +98,7 @@ namespace Neptunia_library.ContentSources
 
       
 
-        public Task<IContentSource> GetContentAsync(string contentname)
+        public Task<IContent> GetContentAsync(string contentname)
         {
             throw new System.NotImplementedException();
         }

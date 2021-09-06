@@ -17,9 +17,9 @@ namespace Neptunia_library.Builders
         }
 
         public void RegisterContentSourceProvider<TContentSourceProvider>(ContentTypeEnum typeEnum)
-            where TContentSourceProvider : class, IContentSourceProvider
+            where TContentSourceProvider : class, IContentProvider
         {
-            _collection.AddScoped<IContentSourceProvider, TContentSourceProvider>();
+            _collection.AddScoped<IContentProvider, TContentSourceProvider>();
         }
     }
 }

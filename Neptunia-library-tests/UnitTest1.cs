@@ -29,10 +29,10 @@ namespace Neptunia_library_tests
 
             _engine = builder.ConfigureContentSourceProviders(options =>
                 {
-                    options.RegisterContentSourceProvider<YummiAnimeContentSourceProvider>(ContentTypeEnum.Anime);
+                    options.RegisterContentSourceProvider<YummiAnimeContentProvider>(ContentTypeEnum.Anime);
                 }).ConfigureDataBaseProviders(options =>
                 {
-                    options.RegisterDataBaseProvider<ShikimoriDataBaseProvider>(ContentTypeEnum.Anime);
+                    options.RegisterDataBaseProvider<ShikimoriContentDataBaseProvider>(ContentTypeEnum.Anime);
                 }).ConfigureServices(collection =>
                 {
                     collection.AddSingleton<ClientSettings, ClientSettings>(sp => new ClientSettings("NETptunia",
@@ -49,12 +49,12 @@ namespace Neptunia_library_tests
         {
             ParsedContentBuilder contentBuilder = new ParsedContentBuilder();
             DataBaseProviderInfo info =
-                _engine.GetContentInfoFromDataBaseProvider("Fate Stay Night", ContentTypeEnum.Anime);
-            IEnumerable<IContentSource> contentSources =
-                _engine.GetContentInfoFromContentSources("Fate Stay Night", ContentTypeEnum.Anime);
+                _engine.GetContentInfoFromDataBaseProvider("Fate Stay Night", "Anime");
+            IEnumerable<IContent> contentSources =
+                _engine.GetContentInfoFromContentSources("Fate Stay Night", "Anime");
 
             ParsedContent result = contentBuilder.SetMainInfo(info).SetContentFromContentSources(contentSources)
-                .BuildContent(ContentTypeEnum.Anime);
+                .BuildContent("Anime");
             
             Assert.NotNull(info);
             Assert.NotNull(contentSources);

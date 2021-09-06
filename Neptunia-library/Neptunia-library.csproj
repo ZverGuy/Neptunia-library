@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="ParserEngine.ProviderInit.cs">
+      <Compile Update="ParserEngine.Obsolete.cs">
         <DependentUpon>ParserEngine.cs</DependentUpon>
       </Compile>
     </ItemGroup>

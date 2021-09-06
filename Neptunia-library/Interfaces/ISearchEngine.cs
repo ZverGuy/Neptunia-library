@@ -5,6 +5,6 @@ namespace Neptunia_library.Interfaces
 {
     public interface ISearchEngine
     {
-        IEnumerable<SearchEngineResult> GetSearchResults(string searchquery, IEnumerable<IContentSourceProvider> sites);
+        IEnumerable<SearchEngineResult> GetSearchResults(string searchquery, IEnumerable<IContentProvider> sites);
     }
 }

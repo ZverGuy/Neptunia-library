@@ -1,20 +1,30 @@
+using System;
 using System.Collections.Generic;
 using Neptunia_library.Interfaces;
+using Newtonsoft.Json;
 
 namespace Neptunia_library.DTOs.ContentSourceStructs
 {
-    public class ContentSourceWithSubSources : IContentSource
+    public class SimpleContent : IContent
     {
+        [JsonProperty("sourceName")]
         public string ContentSourceName { get; set; }
+        
+        [JsonProperty("name")]
         public string ContentName { get; set; }
+        
+        [JsonProperty("url")]
         public string UrlToContentPage { get; set; }
+        
+        [JsonProperty("additionalProps")]
         public Dictionary<string, string> ParserParameters { get; set; }
-        public List<SubContentSource> SubContentSources { get; set; }
+        
+        [JsonProperty("content")]
+        public ContentSourceUrl Source;
 
-        public ContentSourceWithSubSources()
+        public SimpleContent()
         {
             ParserParameters = new Dictionary<string, string>();
-            SubContentSources = new List<SubContentSource>();
         }
     }
 }

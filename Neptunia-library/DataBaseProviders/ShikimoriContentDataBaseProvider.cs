@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,19 +15,29 @@ using ShikimoriSharp.Settings;
 
 namespace Neptunia_library.DataBaseProviders
 {
-    public class ShikimoriDataBaseProvider : IDataBaseProvider
+    public class ShikimoriContentDataBaseProvider : IContentDataBaseProvider
     {
         private ShikimoriClient _client;
         
         private IWebDriver WebDriver { get;  set; }
 
-        public ContentTypeEnum ContentType => ContentTypeEnum.Anime;
+        public IEnumerable<string> ContentTypes => new[]
+        {
+            "Anime"
+        };
+
+        public IEnumerable<string> Languages => new[]
+        {
+            "Russian"
+        };
 
 
-        public ShikimoriDataBaseProvider(ClientSettings shikimoriClientSettings)
+        public ShikimoriContentDataBaseProvider(ClientSettings shikimoriClientSettings)
         {
             _client = new ShikimoriClient(null,shikimoriClientSettings);
         }
+
+       
 
         public  DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null)
         {
@@ -39,7 +50,7 @@ namespace Neptunia_library.DataBaseProviders
             {
                 Name = info.Name,
                 Description = "Where Description????",
-                UrlToContent = "shikimori.one" +info.Url,
+                UrlToContent = "shikimori.one" + info.Url,
                 UserScore = info.Score
             };
             return result;

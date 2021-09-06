@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Neptunia_library.Interfaces
 {
-    public interface IContentSource
+    public interface IContent
     {
         string ContentSourceName { get; set; }
         string ContentName { get; set; }

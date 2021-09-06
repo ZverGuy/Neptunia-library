@@ -22,7 +22,7 @@ namespace Neptunia_library.SearchEngines
             _sitesUrl = searxInstancesUrl;
             _storage = userAgentStorage;
         }
-        public IEnumerable<SearchEngineResult> GetSearchResults(string searchquery, IEnumerable<IContentSourceProvider> sites)
+        public IEnumerable<SearchEngineResult> GetSearchResults(string searchquery, IEnumerable<IContentProvider> sites)
         {
             List<SearchEngineResult> results = new List<SearchEngineResult>();
             using (HttpClient client = new HttpClient())
@@ -66,7 +66,7 @@ namespace Neptunia_library.SearchEngines
         
         
         
-        private string GetSearchQueryWithDorks(string searchtext, IEnumerable<IContentSourceProvider> sites)
+        private string GetSearchQueryWithDorks(string searchtext, IEnumerable<IContentProvider> sites)
         {
             StringBuilder sb = new StringBuilder();
             Regex regex = new Regex(@"\/\/(.+?)\/");
