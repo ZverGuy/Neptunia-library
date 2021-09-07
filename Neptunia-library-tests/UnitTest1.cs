@@ -36,7 +36,9 @@ namespace Neptunia_library_tests
                 })
                 .ConfigureDataBaseProviders(options =>
                 {
+                    options.RegisterDataBaseProvider<TestContentDataBaseProvider>();
                     options.RegisterDataBaseProvider<ShikimoriContentDataBaseProvider>();
+                    
                 })
                 .ConfigureServices(collection =>
                 {

@@ -39,7 +39,8 @@ namespace Neptunia_library.DataBaseProviders
 
        
 
-        public  DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null)
+        public DataBaseProviderInfo GetInfoFromDataBaseService(string contentName,
+            [AllowNull] string userAgent = null)
         {
             Anime info = _client.Animes.GetAnime(new AnimeRequestSettings()
             {

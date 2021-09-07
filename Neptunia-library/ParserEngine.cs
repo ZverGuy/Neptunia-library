@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -74,25 +75,26 @@ namespace Neptunia_library
             DataBaseProviderInfo result = null;
             IEnumerable<IContentDataBaseProvider> validProviders = _serviceProvider
                 .GetServices<IContentDataBaseProvider>()
-                .AsParallel()
                 .Where(provider => provider.Languages.Contains(settings.Language) &&
                                    provider.ContentTypes.Contains(settings.ContentType));
 
-            foreach (IContentDataBaseProvider provider in validProviders)
-            {
-                try
-                {
-                    result = await provider.GetInfoFromDataBaseServiceAsync(settings.ContentName);
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    _logger.Warning($"[DataBaseProviders] \"{provider.ToString()}\" Failed to get info. Go Next");
-                    continue;
-                }
-            }
 
-            if (result == null)
+            IContentDataBaseProvider first = validProviders.First();
+            
+            IContentDataBaseProvider second = validProviders.Skip(1).First();
+            
+                Task<DataBaseProviderInfo> asyncresult =
+                NeptuniaTaskFactory.CreateTaskWithExceptionChain<DataBaseProviderInfo>(
+                    mainfunc: () =>  first.GetInfoFromDataBaseService(settings.ContentName),
+                    funcsAfterExcepion: new Func<DataBaseProviderInfo>[]
+                    {
+                        () => second.GetInfoFromDataBaseService(settings.ContentName)
+                    }, continualtion: TaskScheduler.Default);
+
+
+            result = await asyncresult;
+
+               if (result == null)
             {
                 _logger.Error("[DataBaseProviders] Failed to get info from all DataBaseProviders");
             }
@@ -190,6 +192,7 @@ namespace Neptunia_library
             if (result.Count == 0)
             {
                 _logger.Error("[ContentProviders] failed get info from all contentproviders");
+                _logger.Debug("adad");
             }
 
             return result;

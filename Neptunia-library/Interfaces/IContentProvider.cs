@@ -15,6 +15,5 @@ namespace Neptunia_library.Interfaces
         string SiteUrl { get; }
        
         IContent GetContent(string contentname, [AllowNull] string userAgent = null);
-        Task<IContent> GetContentAsync(string contentname);
     }
 }

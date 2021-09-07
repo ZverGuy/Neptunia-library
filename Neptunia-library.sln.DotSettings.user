@@ -1,12 +1,12 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=177A3C7A_002DA20D_002D4A30_002DBB85_002D12B63574D201_002Ff_003AParserEngine_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\Max\AppData\Local\JetBrains\Rider2021.2\resharper-host\temp\Rider\vAny\CoverageData\_Neptunia-library.256812509\Snapshot\snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7f915649_002D57f6_002D447d_002D80c4_002D36727ae66964/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ContentProvidersTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=37b29d55_002Dbbac_002D4d2b_002D9f8d_002Df2776447ff85/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DataBaseProviderTestAsync" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.ContentProvidersTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.ContentProvidersTestAsync&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::1E071422-CB55-45B6-8FBB-4FE22D32290A::net5.0::Neptunia_library_tests.InitializationTests.DataBaseProviderTestAsync&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
 	
 	
 	

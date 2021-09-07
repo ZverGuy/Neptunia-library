@@ -14,6 +14,5 @@ namespace Neptunia_library.Interfaces
         IEnumerable<string> Languages { get; }
 
         DataBaseProviderInfo GetInfoFromDataBaseService(string contentName, [AllowNull] string userAgent = null);
-        Task<DataBaseProviderInfo> GetInfoFromDataBaseServiceAsync(string contentName);
     }
 }
